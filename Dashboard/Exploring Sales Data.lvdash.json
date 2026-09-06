@@ -1,0 +1,197 @@
+{
+  "datasets": [
+    {
+      "name": "57aea432",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "USE CATALOG `workspace`;\n",
+        "USE SCHEMA `salesdb`;\n",
+        "\n",
+        "SELECT \n",
+        "date_trunc('month',order_date) AS month,\n",
+        "SUM(sales_amount)\n",
+        "FROM fact_sales\n",
+        "GROUP BY month\n"
+      ]
+    },
+    {
+      "name": "9560b757",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "USE CATALOG `workspace`;\n",
+        "USE SCHEMA `salesdb`;\n",
+        "\n",
+        "SELECT\n",
+        "SUM(s.sales_amount),\n",
+        "p.category\n",
+        "FROM fact_sales s\n",
+        "LEFT JOIN dim_products p\n",
+        "ON p.product_key = s.product_key\n",
+        "GROUP BY category"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "c087d164",
+      "displayName": "EDA Sales Data",
+      "layout": [
+        {
+          "widget": {
+            "name": "1b9b484b",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "57aea432",
+                  "fields": [
+                    {
+                      "name": "month",
+                      "expression": "`month`"
+                    },
+                    {
+                      "name": "sum(sum(sales_amount))",
+                      "expression": "SUM(`sum(sales_amount)`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "EDA Orders Over Time",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "marker": {
+                  "shape": "circle"
+                },
+                "layout": "layer"
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "month",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(sum(sales_amount))",
+                  "displayName": "sum(sales_amount)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 7,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "16839c42",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 24px;\">EDA Sales Data</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "1b169594",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9560b757",
+                  "fields": [
+                    {
+                      "name": "sum(sum(sales_amount))",
+                      "expression": "SUM(`sum(sales_amount)`)"
+                    },
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "mark": {
+                "layout": "stack"
+              },
+              "frame": {
+                "title": "Sales By Category",
+                "showTitle": true,
+                "showDescription": false
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(sum(sales_amount))",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "sum(sales_amount)"
+                },
+                "color": {
+                  "fieldName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 1,
+            "width": 5,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
